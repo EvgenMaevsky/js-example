@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+    <input type="button" value="sum" id="btn" />
+    <script>
+        //суммирует значения из строки запроса
+
+        function getQueryString() {
+
+            var args = {};                                  // пустой объект
+            
+            var query = location.search.substring(1);       // Получение строки запроса.
+            var pairs = query.split("&");                   // Разделение строки по амперсанду
+
+            for (var i = 0; i < pairs.length; i++) {
+
+                var pos = pairs[i].indexOf('=');            // Проверка пары "name=value"
+                if (pos == -1) {                            // Если не найдено - пропустить
+                    continue;
+                }
+
+                var argname = pairs[i].substring(0, pos);   // Получение имени
+                var value = pairs[i].substring(pos + 1);    // Получение значения
+
+                args[argname] = value;                      // Сохранение как свойства
+
+            }
+
+            return args;
+        }
+
+        
+        document.getElementById("btn").onclick = function () {
+            var args = getQueryString();
+            var sum = +(args.a) + +(args.b);
+            return document.write("сумма " + sum);
+        }
+    </script>
+</body>
+</html>

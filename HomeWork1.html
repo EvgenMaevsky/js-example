@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title></title>
+</head>
+<body>
+
+    <!--display of timer-->
+    <p id="meter">...</p>
+    <!--timer controls-->
+    <input type="button" id="start" value="Start" />
+    <input type="button" id="stop" value="Stop" />
+    <input type="button" id="clear" value="Clear" />
+
+    <script>
+        //simple timer
+        var ms = 0;
+        var s = 0;
+        var m = 0;
+        var intervalHandler;
+        //timer
+        var count = function () {
+            get("meter").innerHTML = m + ":" + s + ":" + ms;
+            ms++;
+            if (ms > 99) {
+                ms = 0;
+                s++;
+            };
+            if (s > 59) {
+                s = 0;
+                m++
+            };
+        }
+
+        var get = function (name) {
+            return document.getElementById(name)
+        };
+        //start button function
+        get("start").onclick = function () {
+            intervalHandler = setInterval(count, 10);
+        };
+        //stop button function
+        get("stop").onclick = function () {
+            clearInterval(intervalHandler);
+        };
+        //clear button function
+        get("clear").onclick = function () {
+            clearInterval(intervalHandler);
+            ms = 0;
+            s = 0;
+            m = 0;
+            get("meter").innerHTML = m + ":" + s + ":" + ms;
+        }
+
+    </script>
+</body>
+</html>
