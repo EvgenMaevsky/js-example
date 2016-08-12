@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>hw2-2</title>
+</head>
+<body>
+  <input type="button" value="add" onclick="addP()">
+  <div id="cont"></div>
+
+
+  <script>
+     var counter = 0;
+
+    //  var par = document.createElement('p');
+    //  var elem = document.getElementsByTagName("p");
+
+
+     function addP(){
+       if(counter<10){
+         var cont = document.getElementById('cont');
+         var par = document.createElement('p');
+         par.innerHTML = 'Lorem ipsum';
+         cont.appendChild(par);
+         counter++;
+          }
+        else{
+             for (var i = 0; i < counter; i++) {
+                 var cont = document.getElementById("cont");
+                 var item = cont.lastChild;
+                 if (item != null) {
+                     // удаление выбранного элемента из дерева.
+                     cont.removeChild(item);
+                 };
+             };
+               counter = 0;
+             }
+
+         }
+
+     
+  </script>
+</body>
+</html>
