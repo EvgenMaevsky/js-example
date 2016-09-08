@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Guess the number</title>
+  <script type="text/javascript">
+    var number = parseInt(Math.random()*100);//обираємо випадкове число
+    var guess;
+
+    alert("Greatings! It is 'Guess The Number Game'. Computer choose number from 1 to 100 already and you must guess it. You have endless count of tries. So go on and good luck!");// Привітання і умови гри
+
+    while(guess!=number){//цикл без breaк, умова виходу - введене вірно число
+      guess = parseInt(prompt("Guess the number: "));//вгадуємо число
+      if(guess<number) alert("My number is larger then " + guess + "! Try again.")//якщо загадане число менше
+      else if(guess>number) alert("My number is less then " + guess + "! Try again.")
+    };//якщо загадане більше
+
+    document.write("<h1>Great! It was " + number + "!</h1>");//Ура! Вгадав)
+  </script>
+  <style>
+    /*чисто номінально*/
+    h1{
+      font-size: 100px;
+      text-align: center;
+      color: #4AA4DF;
+    }
+  </style>
+</head>
+<body>
+
+</body>
+</html>
