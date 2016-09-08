@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gamedev Canvas Workshop</title>
+  <style>
+    * {padding: 0;margin: 0;}
+    canvas { background: #eee; display: block; margin: 0 auto; }
+  </style>
+</head>
+<body>
+  <canvas id="myCanvas" width="800" height="500"></canvas>
+
+  <script>
+    var canvas = document.getElementById('myCanvas');
+    var ctx = canvas.getContext('2d');
+
+    var x = canvas.width/2;
+    var y = canvas.height-30;
+    var ballRadius = 20;
+
+    var color;
+    var dx = 3;
+    var dy = -3;
+
+    function colorRand(){
+      var rand = Math.random()*10;
+      if(rand>8){color = 'green'}
+      else if(rand>6){color = 'blue'}
+      else if(rand>5){color = 'lightblue'}
+      else if(rand>4){color = 'red'}
+      else if(rand>3){color = 'violet'}
+      else if(rand>2){color = 'yellow'}
+      else if(rand>1){color = 'orange'}
+      else{color="pink"};
+    }
+
+    function drawBall(){
+      ctx.beginPath();
+      ctx.arc(x,y, ballRadius, 0, Math.PI*2);
+      ctx.fillStyle = color;
+      ctx.fill();
+      ctx.closePath();
+    };
+
+    function draw(){
+      ctx.clearRect(0,0, canvas.width, canvas.height);
+      drawBall();
+      if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
+        dx=-dx;
+        colorRand();
+      };
+      if(y + dy > canvas.height-ballRadius || y + dy < ballRadius) {
+        dy=-dy;
+        colorRand();
+      }
+      x += dx;
+      y += dy;
+    }
+    setInterval(draw, 10);
+
+  </script>
+</body>
+</html>
