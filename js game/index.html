@@ -12,17 +12,50 @@
   <canvas id="myCanvas" width="800" height="500"></canvas>
 
   <script>
+  //variables
+
     var canvas = document.getElementById('myCanvas');
     var ctx = canvas.getContext('2d');
 
-    var x = canvas.width/2;
-    var y = canvas.height-30;
+    var x = canvas.width/2; //start coordinates of ball (x)
+    var y = canvas.height-30; // --- (y)
     var ballRadius = 20;
 
     var color;
-    var dx = 3;
-    var dy = -3;
+    var dx = 3; //speed on x axis
+    var dy = -3; //speed on y axis
+    //paddle
+    var paddleHeight = 10;
+    var paddleWidth = 150;
+    var paddleX = (canvas.width - paddleWidth)/2;
+    //button pressing
+    var rightPressed = false;
+    var leftPressed = false;
+    document.addEventListener('keydown',keyDownHandler, false);
+    document.addEventListener('keyup',keyUpHandler, false);
 
+    function keyDownHandler(e) {
+      if(e.keyCode == 39) {
+        rightPressed = true;
+      }
+      else if(e.keyCode == 37) {
+        leftPressed = true;
+      }
+
+    };
+
+    function keyUpHandler(e) {
+      if(e.keyCode == 39) {
+        rightPressed = false;
+      }
+      else if(e.keyCode == 37) {
+        leftPressed = false;
+      }
+
+    };
+
+
+//random color of ball after collision
     function colorRand(){
       var rand = Math.random()*10;
       if(rand>8){color = 'green'}
@@ -33,8 +66,17 @@
       else if(rand>2){color = 'yellow'}
       else if(rand>1){color = 'orange'}
       else{color="pink"};
-    }
+    };
 
+//drawing paddle
+      function drawPaddle() {
+        ctx.beginPath();
+        ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
+        ctx.fillStyle = "#0095DD";
+        ctx.fill();
+        ctx.closePath();
+      };
+//drawing ball
     function drawBall(){
       ctx.beginPath();
       ctx.arc(x,y, ballRadius, 0, Math.PI*2);
@@ -42,18 +84,39 @@
       ctx.fill();
       ctx.closePath();
     };
-
+//drawing canvas
     function draw(){
       ctx.clearRect(0,0, canvas.width, canvas.height);
+      //initialize ball on canvas
       drawBall();
+      drawPaddle();
+      //collision with walls
       if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
         dx=-dx;
         colorRand();
       };
-      if(y + dy > canvas.height-ballRadius || y + dy < ballRadius) {
+
+      if(y + dy < ballRadius) {
         dy=-dy;
         colorRand();
+      }else if (y + dy > canvas.height-ballRadius) {
+        if( x > paddleX && x < paddleX + paddleWidth ){
+          dy = -dy;
+        }else{
+          alert('GAME OVER');
+          document.location.reload();
       }
+    };
+      //padddle with ball collision
+
+      //paddle movement
+      if(rightPressed && paddleX < canvas.width - paddleWidth) {
+        paddleX += 7;
+      }
+      else if(leftPressed && paddleX > 0) {
+        paddleX-= 7;
+      };
+      //ball movement
       x += dx;
       y += dy;
     }
