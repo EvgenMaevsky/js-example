@@ -9,25 +9,58 @@
   </style>
 </head>
 <body>
-  <canvas id="myCanvas" width="800" height="500"></canvas>
+  <canvas id="myCanvas" width="480" height="320"></canvas>
 
   <script>
-  //variables
+    //variables
 
     var canvas = document.getElementById('myCanvas');
     var ctx = canvas.getContext('2d');
 
     var x = canvas.width/2; //start coordinates of ball (x)
     var y = canvas.height-30; // --- (y)
-    var ballRadius = 20;
+    var ballRadius = 10;
 
     var color;
-    var dx = 3; //speed on x axis
-    var dy = -3; //speed on y axis
+    var ballSpeed = 2;
+    var dx = ballSpeed; //speed on x axis
+    var dy = -ballSpeed; //speed on y axis
     //paddle
     var paddleHeight = 10;
-    var paddleWidth = 150;
+    var paddleWidth = 75;
     var paddleX = (canvas.width - paddleWidth)/2;
+    //bricks
+    var brickRowCount = 3;
+    var brickColumnCount = 5;
+    var brickWidth = 75;
+    var brickHeight = 20;
+    var brickPadding = 10;
+    var brickOffsetTop = 30;
+    var brickOffsetLeft = 30;
+    var bricks = [];
+    for(c=0; c<brickColumnCount; c++) {
+      bricks[c] = [];
+      for(r=0; r<brickRowCount; r++) {
+        bricks[c][r] = { x: 0, y: 0, status: 1};
+      }
+    };
+    function drawBricks() {
+      for(c=0;c<brickColumnCount; c++) {
+        for(r=0; r<brickRowCount; r++) {
+          if(bricks[c][r].status == 1) {
+            var brickX = (c*(brickWidth+brickPadding))+brickOffsetLeft;
+            var brickY = (r*(brickHeight+brickPadding))+brickOffsetTop;
+            bricks[c][r].x = brickX;
+            bricks[c][r].y = brickY;
+            ctx.beginPath();
+            ctx.rect(brickX, brickY, brickWidth, brickHeight);
+            ctx.fillStyle = '#0095DD';
+            ctx.fill();
+            ctx.closePath();
+          }
+        }
+      }
+    };
     //button pressing
     var rightPressed = false;
     var leftPressed = false;
@@ -54,8 +87,24 @@
 
     };
 
+    //brick collision
+    function collisionDetection() {
+      for(c=0; c<brickColumnCount; c++) {
+        for(r=0; r<brickRowCount; r++) {
+          var b = bricks[c][r];
+          if(b.status == 1) {
+            if(x > b.x && x < b.x+brickWidth && y > b.y && y < b.y+brickHeight){
+              dy = -dy;
+              b.status = 0;
+              colorRand();
+            }
+          }
+        }
+      }
+    };
 
-//random color of ball after collision
+
+    //random color of ball after collision
     function colorRand(){
       var rand = Math.random()*10;
       if(rand>8){color = 'green'}
@@ -68,7 +117,7 @@
       else{color="pink"};
     };
 
-//drawing paddle
+    //drawing paddle
       function drawPaddle() {
         ctx.beginPath();
         ctx.rect(paddleX, canvas.height-paddleHeight, paddleWidth, paddleHeight);
@@ -76,7 +125,8 @@
         ctx.fill();
         ctx.closePath();
       };
-//drawing ball
+
+    //drawing ball
     function drawBall(){
       ctx.beginPath();
       ctx.arc(x,y, ballRadius, 0, Math.PI*2);
@@ -84,12 +134,15 @@
       ctx.fill();
       ctx.closePath();
     };
-//drawing canvas
+
+    //drawing canvas
     function draw(){
       ctx.clearRect(0,0, canvas.width, canvas.height);
       //initialize ball on canvas
       drawBall();
       drawPaddle();
+      drawBricks();
+      collisionDetection();
       //collision with walls
       if(x + dx > canvas.width-ballRadius || x + dx < ballRadius) {
         dx=-dx;
@@ -107,7 +160,6 @@
           document.location.reload();
       }
     };
-      //padddle with ball collision
 
       //paddle movement
       if(rightPressed && paddleX < canvas.width - paddleWidth) {
